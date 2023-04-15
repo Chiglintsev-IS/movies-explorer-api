@@ -5,8 +5,8 @@ const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
-const { connect } = require('./db');
-const { PORT } = require('./config');
+const { connect } = require('./config/db');
+const { PORT } = require('./config/config');
 
 const app = express();
 
