@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 const { connect } = require('./config/db');
 const { PORT } = require('./config/config');
+const movieRoutes = require('./routes/movies');
 
 const app = express();
 
@@ -15,6 +16,9 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use('/movies', movieRoutes);
+
 app.use(errors());
 
 connect();
