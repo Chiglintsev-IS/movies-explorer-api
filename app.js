@@ -17,7 +17,13 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+// add req.user._id to all requests
+app.use((req, res, next) => {
+  req.user = {
+    _id: '5f9f1b9b0b1b9c0b5c8b1b1c',
+  };
+  next();
+});
 app.use('/movies', movieRoutes);
 app.use('/users', userRoutes);
 
