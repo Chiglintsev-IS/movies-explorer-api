@@ -8,7 +8,16 @@ const urlValidator = (value, helpers) => {
   return helpers.message('Неправильный формат ссылки');
 };
 
+const getMoviesValidator = celebrate({
+  user: Joi.object().keys({
+    _id: Joi.string().hex().length(24),
+  }),
+});
+
 const addMovieValidator = celebrate({
+  user: Joi.object().keys({
+    _id: Joi.string().hex().length(24),
+  }),
   body: Joi.object().keys({
     country: Joi.string().required(),
     director: Joi.string().required(),
@@ -25,6 +34,9 @@ const addMovieValidator = celebrate({
 });
 
 const deleteMovieValidator = celebrate({
+  user: Joi.object().keys({
+    _id: Joi.string().hex().length(24),
+  }),
   params: Joi.object().keys({
     movieId: Joi.string().hex().length(24),
   }),
@@ -33,4 +45,5 @@ const deleteMovieValidator = celebrate({
 module.exports = {
   addMovieValidator,
   deleteMovieValidator,
+  getMoviesValidator,
 };
