@@ -2,8 +2,9 @@ const Movie = require('../models/movie');
 
 const getMovies = async (req, res, next) => {
   try {
-    const movies = await Movie.find({ owner: req.user._id });
-    res.send(movies || []);
+    const userId = req.user._id;
+    const movies = await Movie.getMoviesByOwner(userId);
+    res.send(movies);
   } catch (error) {
     next(error);
   }
@@ -11,33 +12,9 @@ const getMovies = async (req, res, next) => {
 
 const addMovie = async (req, res, next) => {
   try {
-    const {
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailerLink,
-      nameRU,
-      nameEN,
-      thumbnail,
-      movieId,
-    } = req.body;
-    const movie = await Movie.create({
-      country,
-      director,
-      duration,
-      year,
-      description,
-      image,
-      trailerLink,
-      nameRU,
-      nameEN,
-      thumbnail,
-      movieId,
-      owner: req.user._id,
-    });
+    const movieData = req.body;
+    const userId = req.user._id;
+    const movie = await Movie.addMovie(movieData, userId);
     res.send(movie);
   } catch (error) {
     next(error);
@@ -46,14 +23,9 @@ const addMovie = async (req, res, next) => {
 
 const deleteMovie = async (req, res, next) => {
   try {
-    const movie = await Movie.findById(req.params.id).select('+owner');
-    if (!movie) {
-      throw new Error('Movie not found');
-    }
-    if (movie.owner.toString() !== req.user._id) {
-      throw new Error('You are not owner of this movie');
-    }
-    await Movie.findByIdAndRemove(req.params.id);
+    const movieId = req.params.id;
+    const userId = req.user._id;
+    const movie = await Movie.deleteMovie(movieId, userId);
     res.send(movie);
   } catch (error) {
     next(error);
