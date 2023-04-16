@@ -1,9 +1,7 @@
 const Movie = require('../models/movie');
-const { checkUserId } = require('../utils/checkUserId');
 
 const getMovies = async (req, res, next) => {
   try {
-    checkUserId(req);
     const movies = await Movie.find({ owner: req.user._id });
     res.send(movies || []);
   } catch (error) {
@@ -13,7 +11,6 @@ const getMovies = async (req, res, next) => {
 
 const addMovie = async (req, res, next) => {
   try {
-    checkUserId(req);
     const {
       country,
       director,
@@ -49,7 +46,6 @@ const addMovie = async (req, res, next) => {
 
 const deleteMovie = async (req, res, next) => {
   try {
-    checkUserId(req);
     const movie = await Movie.findById(req.params.id).select('+owner');
     if (!movie) {
       throw new Error('Movie not found');

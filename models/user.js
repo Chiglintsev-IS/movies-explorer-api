@@ -47,7 +47,7 @@ userSchema.pre('save', async function hashPassrowrd(next) {
 });
 
 // Функция поиска пользователя по email и проверки пароля
-userSchema.statics.findUserByCredentials = async function findUserByCredentials(email, password) {
+userSchema.statics('findUserByCredentials', async function findUserByCredentials(email, password) {
   const user = await this.findOne({ email }).select('+password');
   if (!user) {
     throw new Error('Invalid email or password');
@@ -57,12 +57,12 @@ userSchema.statics.findUserByCredentials = async function findUserByCredentials(
     throw new Error('Invalid email or password');
   }
   return user;
-};
+});
 
 // Функция генерации токена аутентификации для пользователя
-userSchema.methods.generateAuthToken = async function generateAuthToken() {
+userSchema.methods('generateAuthToken', async function generateAuthToken() {
   const token = jwt.sign({ _id: this._id }, JWT_SECRET);
   return token;
-};
+});
 
 module.exports = mongoose.model('user', userSchema);
