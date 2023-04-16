@@ -6,7 +6,7 @@ const getUser = async (req, res, next) => {
     const user = await User
       .findById(_id)
       .orFail(new Error('Пользователь не найден'));
-    res.send({ data: user });
+    res.send({ user });
   } catch (err) {
     if (err.name === 'CastError') {
       err.message = 'Неверный формат ID пользователя';
@@ -25,7 +25,7 @@ const updateUser = async (req, res, next) => {
         { email, name },
         { new: true, runValidators: true },
       ).orFail(new Error('Пользователь не найден'));
-    res.send({ data: user });
+    res.send({ user });
   } catch (err) {
     if (err.name === 'CastError') {
       err.message = 'Неверный формат ID пользователя';
