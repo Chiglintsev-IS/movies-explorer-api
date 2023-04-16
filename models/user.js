@@ -34,7 +34,7 @@ const userSchema = new Schema({
 });
 
 // Функция хеширования пароля перед сохранением пользователя
-userSchema.pre('save', async function hashPassrowrd(next) {
+userSchema.pre('save', async function hashPassrword(next) {
   if (!this.isModified('password')) {
     return next();
   }
