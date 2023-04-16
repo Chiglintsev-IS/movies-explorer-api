@@ -9,7 +9,8 @@ module.exports = (app) => {
     max: 100, // limit each IP to 100 requests per windowMs
   }));
   app.use(helmet());
-  app.use(cors());
+  // TODO: config cors when frontend will be ready
+  app.use(cors({ origin: '*' }));
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 };
