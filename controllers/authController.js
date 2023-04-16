@@ -3,11 +3,8 @@ const User = require('../models/user');
 const signup = async (req, res, next) => {
   try {
     const { email, password, name } = req.body;
-    const user = await User.create({ email, password, name });
-    res.send({
-      name: user.name,
-      email: user.email,
-    });
+    const user = await User.createUser(email, password, name);
+    res.send(user).status(201);
   } catch (err) {
     if (err.name === 'ValidationError') {
       err.message = 'Ошибка валидации';

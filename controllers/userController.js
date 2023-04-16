@@ -3,9 +3,7 @@ const User = require('../models/user');
 const getUser = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const user = await User
-      .findById(_id)
-      .orFail(new Error('Пользователь не найден'));
+    const user = await User.findUserById(_id);
     res.send({ user });
   } catch (err) {
     if (err.name === 'CastError') {
@@ -19,12 +17,7 @@ const updateUser = async (req, res, next) => {
   try {
     const { _id } = req.user;
     const { email, name } = req.body;
-    const user = await User
-      .findByIdAndUpdate(
-        _id,
-        { email, name },
-        { new: true, runValidators: true },
-      ).orFail(new Error('Пользователь не найден'));
+    const user = await User.updateUser(_id, email, name);
     res.send({ user });
   } catch (err) {
     if (err.name === 'CastError') {
