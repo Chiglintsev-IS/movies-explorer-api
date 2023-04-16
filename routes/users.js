@@ -6,3 +6,5 @@ const { getUserValidator, updateUserValidator } = require('../middlewares/valida
 
 router.get('/me', getUserValidator, getUser);
 router.patch('/me', updateUserValidator, updateUser);
+
+module.exports = router;
