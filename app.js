@@ -8,6 +8,7 @@ const { errors } = require('celebrate');
 const { connect } = require('./config/db');
 const { PORT } = require('./config/config');
 const movieRoutes = require('./routes/movies');
+const userRoutes = require('./routes/users');
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/movies', movieRoutes);
+app.use('/users', userRoutes);
 
 app.use(errors());
 
