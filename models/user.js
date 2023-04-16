@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../configs/config');
+const serializeUser = require('../utils/serializers');
 
 const { Schema } = mongoose;
 
@@ -14,7 +15,7 @@ const userSchema = new Schema({
     trim: true,
     lowercase: true,
     validate: {
-      validator: (v) => validator.isEmail(v),
+      validator: validator.isEmail,
       message: 'Неправильный формат почты',
     },
   },
@@ -46,8 +47,34 @@ userSchema.pre('save', async function hashPassrowrd(next) {
   }
 });
 
+// Функция для создания пользователя
+userSchema.statics.createUser = async function createUser(email, password, name) {
+  const user = await this.create({ email, password, name });
+  return serializeUser(user);
+};
+
+// Функция для поиска пользователя по id
+userSchema.statics.findUserById = async function findUserById(id) {
+  const user = await this
+    .findById(id)
+    .orFail(new Error('Пользователь не найден'));
+  return serializeUser(user);
+};
+
+// Функция для обновления данных пользователя
+userSchema.statics.updateUser = async function updateUser(id, email, name) {
+  const user = await this
+    .findByIdAndUpdate(
+      id,
+      { email, name },
+      { new: true, runValidators: true },
+    )
+    .orFail(new Error('Пользователь не найден'));
+  return serializeUser(user);
+};
+
 // Функция поиска пользователя по email и проверки пароля
-userSchema.statics('findUserByCredentials', async function findUserByCredentials(email, password) {
+userSchema.statics.findUserByCredentials = async function findUserByCredentials(email, password) {
   const user = await this.findOne({ email }).select('+password');
   if (!user) {
     throw new Error('Invalid email or password');
@@ -56,13 +83,13 @@ userSchema.statics('findUserByCredentials', async function findUserByCredentials
   if (!isMatch) {
     throw new Error('Invalid email or password');
   }
-  return user;
-});
+  return serializeUser(user);
+};
 
 // Функция генерации токена аутентификации для пользователя
-userSchema.methods('generateAuthToken', async function generateAuthToken() {
+userSchema.methods.generateAuthToken = async function generateAuthToken() {
   const token = jwt.sign({ _id: this._id }, JWT_SECRET);
   return token;
-});
+};
 
 module.exports = mongoose.model('user', userSchema);
