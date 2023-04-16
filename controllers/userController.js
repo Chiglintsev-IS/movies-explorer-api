@@ -4,7 +4,7 @@ const getUser = async (req, res, next) => {
   try {
     const { _id } = req.user;
     const user = await User.findUserById(_id);
-    res.send({ user });
+    res.send(user);
   } catch (err) {
     if (err.name === 'CastError') {
       err.message = 'Неверный формат ID пользователя';
@@ -18,7 +18,7 @@ const updateUser = async (req, res, next) => {
     const { _id } = req.user;
     const { email, name } = req.body;
     const user = await User.updateUser(_id, email, name);
-    res.send({ user });
+    res.send(user);
   } catch (err) {
     if (err.name === 'CastError') {
       err.message = 'Неверный формат ID пользователя';
