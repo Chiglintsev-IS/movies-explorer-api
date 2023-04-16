@@ -9,15 +9,18 @@ const signinRoutes = require('./routes/signinRoutes');
 const signupRoutes = require('./routes/signupRoutes');
 const authMiddleware = require('./middlewares/authMiddleware');
 const expressSetup = require('./configs/expressSetup');
+const logger = require('./middlewares/logger');
 
 const app = express();
 expressSetup(app);
 
+app.use(logger.requestLogger);
 app.use('/signin', signinRoutes);
 app.use('/signup', signupRoutes);
 app.use('/movies', authMiddleware, moviesRoutes);
 app.use('/users', authMiddleware, userRoutes);
 
+app.use(logger.errorLogger);
 app.use(errors());
 
 connect();
