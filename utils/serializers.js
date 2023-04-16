@@ -1,7 +1,7 @@
-const serializeUser = (user) => {
-  const { password, ...serializedUser } = user.toObject();
-  return serializedUser;
-};
+const serializeUser = (user) => ({
+  email: user.email,
+  name: user.name,
+});
 
 module.exports = {
   serializeUser,
