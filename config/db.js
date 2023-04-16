@@ -2,5 +2,11 @@ const mongoose = require('mongoose');
 const { MONGODB_URL } = require('./config');
 
 module.exports.connect = () => {
-  mongoose.connect(MONGODB_URL);
+  mongoose.connect(
+    MONGODB_URL,
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  );
 };

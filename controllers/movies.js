@@ -1,10 +1,10 @@
-const { Movie } = require('../models/movie');
+const Movie = require('../models/movie');
 const { checkUserId } = require('../utils/checkUserId');
 
 const getMovies = async (req, res, next) => {
   try {
     checkUserId(req);
-    const movies = await Movie.find({ userId: req.user._id });
+    const movies = await Movie.find({ owner: req.user._id });
     res.send(movies || []);
   } catch (error) {
     next(error);
@@ -21,7 +21,7 @@ const addMovie = async (req, res, next) => {
       year,
       description,
       image,
-      trailer,
+      trailerLink,
       nameRU,
       nameEN,
       thumbnail,
@@ -34,12 +34,12 @@ const addMovie = async (req, res, next) => {
       year,
       description,
       image,
-      trailer,
+      trailerLink,
       nameRU,
       nameEN,
       thumbnail,
       movieId,
-      userId: req.user._id,
+      owner: req.user._id,
     });
     res.send(movie);
   } catch (error) {
