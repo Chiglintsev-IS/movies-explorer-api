@@ -3,7 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../configs/config');
-const serializeUser = require('../utils/serializers');
+const { serializeUser } = require('../utils/serializers');
 
 const { Schema } = mongoose;
 
@@ -83,7 +83,7 @@ userSchema.statics.findUserByCredentials = async function findUserByCredentials(
   if (!isMatch) {
     throw new Error('Invalid email or password');
   }
-  return serializeUser(user);
+  return user;
 };
 
 // Функция генерации токена аутентификации для пользователя
