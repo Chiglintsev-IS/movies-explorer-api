@@ -5,10 +5,12 @@ const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
-const { connect } = require('./config/db');
-const { PORT } = require('./config/config');
+const { connect } = require('./configs/db');
+const { PORT } = require('./configs/config');
 const movieRoutes = require('./routes/movies');
 const userRoutes = require('./routes/users');
+const signinRoutes = require('./routes/signin');
+const signupRoutes = require('./routes/signup');
 
 const app = express();
 
@@ -17,6 +19,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 // add req.user._id to all requests
 app.use((req, res, next) => {
   req.user = {
@@ -24,6 +27,9 @@ app.use((req, res, next) => {
   };
   next();
 });
+
+app.use('/signin', signinRoutes);
+app.use('/signup', signupRoutes);
 app.use('/movies', movieRoutes);
 app.use('/users', userRoutes);
 
