@@ -1,37 +1,22 @@
 require('dotenv').config();
 const express = require('express');
-
-const helmet = require('helmet');
-const cors = require('cors');
-const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
-const { connect } = require('./configs/db');
+const connect = require('./configs/db');
 const { PORT } = require('./configs/config');
-const movieRoutes = require('./routes/movies');
-const userRoutes = require('./routes/users');
-const signinRoutes = require('./routes/signin');
-const signupRoutes = require('./routes/signup');
+const moviesRoutes = require('./routes/moviesRoutes');
+const userRoutes = require('./routes/usersRoutes');
+const signinRoutes = require('./routes/signinRoutes');
+const signupRoutes = require('./routes/signupRoutes');
+const authMiddleware = require('./middlewares/authMiddleware');
+const expressSetup = require('./configs/expressSetup');
 
 const app = express();
-
-app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// add req.user._id to all requests
-app.use((req, res, next) => {
-  req.user = {
-    _id: '5f9f1b9b0b1b9c0b5c8b1b1c',
-  };
-  next();
-});
+expressSetup(app);
 
 app.use('/signin', signinRoutes);
 app.use('/signup', signupRoutes);
-app.use('/movies', movieRoutes);
-app.use('/users', userRoutes);
+app.use('/movies', authMiddleware, moviesRoutes);
+app.use('/users', authMiddleware, userRoutes);
 
 app.use(errors());
 
