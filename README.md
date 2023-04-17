@@ -18,8 +18,9 @@
 1. install `Node.js` 18.0.0 or higher
 2. install and run `MongoDB` (https://www.mongodb.com/docs/manual/administration/install-community/) 
 3. clone the repo
-4. install project dependencies: `npm install`
-5. run the server: `npm run dev`
+4. run command: `copy .env.example .env`
+5. install project dependencies: `npm install`
+6. run the server: `npm run dev`
 
 <br/>
 
