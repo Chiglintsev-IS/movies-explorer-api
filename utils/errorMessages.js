@@ -4,6 +4,7 @@ const movieRelatedErrors = {
   invalidMovieDataPayload: 'Переданы некорректные данные при создании фильма',
   movieNotFound: 'Фильм не найден',
   forbidden: 'Нет прав для удаления чужого фильма',
+  movieAlreadyAdded: 'Фильм уже добавлен',
 };
 
 const userRelatedErrors = {
@@ -24,6 +25,7 @@ const errorMessages = {
   ...userRelatedErrors,
   ...movieRelatedErrors,
   ...validateErrorMessages,
+  unauthorized: 'Необходима авторизация',
 };
 
 module.exports = errorMessages;

@@ -24,8 +24,8 @@ app.use('/movies', authMiddleware, moviesRoutes);
 app.use('/users', authMiddleware, usersRoutes);
 
 app.use(logger.errorLogger);
-app.use(errorHandler);
 app.use(errors());
+app.use(errorHandler);
 
 connect();
 

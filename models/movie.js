@@ -3,6 +3,7 @@ const validator = require('validator');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const errorMessages = require('../utils/errorMessages');
+const ConflictError = require('../errors/ConflictError');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -33,7 +34,7 @@ const movieSchema = new mongoose.Schema({
       message: errorMessages.wrongUrl,
     },
   },
-  trailerLink: {
+  trailer: {
     type: String,
     required: true,
     validate: {
@@ -68,12 +69,20 @@ const movieSchema = new mongoose.Schema({
   },
 });
 
+// add movie if only it was not added before for this user
 movieSchema.statics.addMovie = async function addMovie(movieData, userId) {
-  const movie = await this.create({
+  const movie = await this.findOne({
+    movieId: movieData.movieId,
+    owner: userId,
+  });
+  if (movie) {
+    throw new ConflictError(errorMessages.movieAlreadyAdded);
+  }
+  const newMovie = await this.create({
     ...movieData,
     owner: userId,
   });
-  return movie;
+  return newMovie;
 };
 
 movieSchema.statics.deleteMovie = async function deleteMovie(movieId, userId) {

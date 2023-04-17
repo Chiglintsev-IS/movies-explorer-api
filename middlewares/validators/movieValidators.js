@@ -16,7 +16,7 @@ const addMovieValidator = celebrate({
     year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().required().custom(urlValidator),
-    trailerLink: Joi.string().required().custom(urlValidator),
+    trailer: Joi.string().required().custom(urlValidator),
     thumbnail: Joi.string().required().custom(urlValidator),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
@@ -26,7 +26,7 @@ const addMovieValidator = celebrate({
 
 const deleteMovieValidator = celebrate({
   params: Joi.object().keys({
-    movieId: Joi.string().hex().length(24),
+    id: Joi.string().hex().length(24),
   }),
 });
 
