@@ -93,7 +93,7 @@ movieSchema.statics.deleteMovie = async function deleteMovie(movieId, userId) {
   if (movie.owner.toString() !== userId) {
     throw new ForbiddenError(errorMessages.forbidden);
   }
-  await movie.remove();
+  await this.deleteOne({ _id: movieId });
   return movie;
 };
 
