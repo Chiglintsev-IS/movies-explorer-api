@@ -1,7 +1,7 @@
 # movies-explorer-api   
     Backend for practicum diplom
     IP: 84.252.137.92
-    Domain: https://TBD
+    Domain: https://api.chiglintsev-web-diploma.nomoredomains.monster
     Frontend: TBD
 
 <br/>
