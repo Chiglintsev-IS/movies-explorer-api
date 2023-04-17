@@ -19,6 +19,9 @@ const authMiddleware = (req, res, next) => {
     req.user = { ...req.user, _id: jwtData._id };
     return next();
   } catch (error) {
+    if (error.name === 'JsonWebTokenError' || error.message === 'invalid signature') {
+      return next(new UnauthorizedError(errorMessages.unauthorized));
+    }
     return next(error);
   }
 };
