@@ -29,7 +29,4 @@ app.use(errors());
 
 connect();
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server listening on port ${PORT}`);
-});
+app.listen(PORT);
