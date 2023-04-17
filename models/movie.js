@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const NotFoundError = require('../errors/NotFoundError');
+const ForbiddenError = require('../errors/ForbiddenError');
+const errorMessages = require('../utils/errorMessages');
 
-const { Schema } = mongoose;
-
-const movieSchema = new Schema({
+const movieSchema = new mongoose.Schema({
   country: {
     type: String,
     required: true,
@@ -29,7 +30,7 @@ const movieSchema = new Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: 'Неправильный формат ссылки',
+      message: errorMessages.wrongUrl,
     },
   },
   trailerLink: {
@@ -37,7 +38,7 @@ const movieSchema = new Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: 'Неправильный формат ссылки',
+      message: errorMessages.wrongUrl,
     },
   },
   thumbnail: {
@@ -45,7 +46,7 @@ const movieSchema = new Schema({
     required: true,
     validate: {
       validator: validator.isURL,
-      message: 'Неправильный формат ссылки',
+      message: errorMessages.wrongUrl,
     },
   },
   owner: {
@@ -78,10 +79,10 @@ movieSchema.statics.addMovie = async function addMovie(movieData, userId) {
 movieSchema.statics.deleteMovie = async function deleteMovie(movieId, userId) {
   const movie = await this.findById(movieId).select('+owner');
   if (!movie) {
-    throw new Error('Movie not found');
+    throw new NotFoundError(errorMessages.movieNotFound);
   }
   if (movie.owner.toString() !== userId) {
-    throw new Error('You are not owner of this movie');
+    throw new ForbiddenError(errorMessages.forbidden);
   }
   await movie.remove();
   return movie;

@@ -4,10 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../configs/config');
 const { serializeUser } = require('../utils/serializers');
+const errorMessages = require('../utils/errorMessages');
+const NotFoundError = require('../errors/NotFoundError');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const { Schema } = mongoose;
-
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -16,7 +17,7 @@ const userSchema = new Schema({
     lowercase: true,
     validate: {
       validator: validator.isEmail,
-      message: 'Неправильный формат почты',
+      message: errorMessages.wrongEmail,
     },
   },
   password: {
@@ -57,7 +58,7 @@ userSchema.statics.createUser = async function createUser(email, password, name)
 userSchema.statics.findUserById = async function findUserById(id) {
   const user = await this
     .findById(id)
-    .orFail(new Error('Пользователь не найден'));
+    .orFail(new NotFoundError(errorMessages.userNotFound));
   return serializeUser(user);
 };
 
@@ -69,7 +70,7 @@ userSchema.statics.updateUser = async function updateUser(id, email, name) {
       { email, name },
       { new: true, runValidators: true },
     )
-    .orFail(new Error('Пользователь не найден'));
+    .orFail(new NotFoundError(errorMessages.userNotFound));
   return serializeUser(user);
 };
 
@@ -77,11 +78,11 @@ userSchema.statics.updateUser = async function updateUser(id, email, name) {
 userSchema.statics.findUserByCredentials = async function findUserByCredentials(email, password) {
   const user = await this.findOne({ email }).select('+password');
   if (!user) {
-    throw new Error('Invalid email or password');
+    throw new UnauthorizedError(errorMessages.wrongEmailOrPassword);
   }
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new Error('Invalid email or password');
+    throw new UnauthorizedError(errorMessages.wrongEmailOrPassword);
   }
   return user;
 };

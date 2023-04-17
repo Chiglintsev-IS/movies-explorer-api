@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const BadRequest = require('../errors/BadRequest');
+const errorMessages = require('../utils/errorMessages');
 
 const getUser = async (req, res, next) => {
   try {
@@ -7,7 +9,7 @@ const getUser = async (req, res, next) => {
     res.send(user);
   } catch (err) {
     if (err.name === 'CastError') {
-      err.message = 'Неверный формат ID пользователя';
+      next(new BadRequest(errorMessages.wrongUserId));
     }
     next(err);
   }
@@ -21,9 +23,9 @@ const updateUser = async (req, res, next) => {
     res.send(user);
   } catch (err) {
     if (err.name === 'CastError') {
-      err.message = 'Неверный формат ID пользователя';
+      next(new BadRequest(errorMessages.wrongUserId));
     } else if (err.name === 'ValidationError') {
-      err.message = 'Ошибка валидации';
+      next(new BadRequest(errorMessages.invalidUpdateUserDataPayload));
     }
     next(err);
   }
