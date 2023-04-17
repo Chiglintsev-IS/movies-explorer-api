@@ -7,7 +7,7 @@ const { PORT } = require('./configs/config');
 const signinRoutes = require('./routes/signinRoutes');
 const signupRoutes = require('./routes/signupRoutes');
 const moviesRoutes = require('./routes/moviesRoutes');
-const userRoutes = require('./routes/usersRoutes');
+const usersRoutes = require('./routes/usersRoutes');
 
 const expressSetup = require('./configs/expressSetup');
 const authMiddleware = require('./middlewares/authMiddleware');
@@ -21,7 +21,7 @@ app.use(logger.requestLogger);
 app.use('/signin', signinRoutes);
 app.use('/signup', signupRoutes);
 app.use('/movies', authMiddleware, moviesRoutes);
-app.use('/users', authMiddleware, userRoutes);
+app.use('/users', authMiddleware, usersRoutes);
 
 app.use(logger.errorLogger);
 app.use(errorHandler);
