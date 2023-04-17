@@ -15,7 +15,7 @@
 
 ----
 ### Steps to run the project locally:
-1. install `Node.js`
+1. install `Node.js` 18.0.0 or higher
 2. install and run `MongoDB` (https://www.mongodb.com/docs/manual/administration/install-community/) 
 3. Clone the repo
 4. install project dependencies: `npm install`
