@@ -1,5 +1,11 @@
 # movies-explorer-api   
     Backend for practicum diplom
+    IP: 84.252.137.92
+    Domain: https://TBD
+    Frontend: TBD
+
+<br/>
+
 
 ### API endpoints:
 * `POST /signup` - create a user
@@ -18,7 +24,7 @@
 1. install `Node.js` 18.0.0 or higher
 2. install and run `MongoDB` (https://www.mongodb.com/docs/manual/administration/install-community/) 
 3. clone the repo
-4. run command: `copy .env.example .env`
+4. run command: `cp .env.example .env`
 5. install project dependencies: `npm install`
 6. run the server: `npm run dev`
 
