@@ -4,13 +4,8 @@ const { errors } = require('celebrate');
 const connect = require('./configs/db');
 const { PORT } = require('./configs/config');
 
-const signinRoutes = require('./routes/signinRoutes');
-const signupRoutes = require('./routes/signupRoutes');
-const moviesRoutes = require('./routes/moviesRoutes');
-const usersRoutes = require('./routes/usersRoutes');
-
 const expressSetup = require('./configs/expressSetup');
-const authMiddleware = require('./middlewares/authMiddleware');
+const routes = require('./routes/index');
 const logger = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -18,10 +13,7 @@ const app = express();
 app.use(logger.requestLogger);
 expressSetup(app);
 
-app.use('/signin', signinRoutes);
-app.use('/signup', signupRoutes);
-app.use('/movies', authMiddleware, moviesRoutes);
-app.use('/users', authMiddleware, usersRoutes);
+app.use(routes);
 
 app.use(logger.errorLogger);
 app.use(errors());
