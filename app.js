@@ -15,9 +15,9 @@ const logger = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
+app.use(logger.requestLogger);
 expressSetup(app);
 
-app.use(logger.requestLogger);
 app.use('/signin', signinRoutes);
 app.use('/signup', signupRoutes);
 app.use('/movies', authMiddleware, moviesRoutes);
