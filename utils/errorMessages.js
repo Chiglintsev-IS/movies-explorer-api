@@ -26,6 +26,7 @@ const errorMessages = {
   ...movieRelatedErrors,
   ...validateErrorMessages,
   unauthorized: 'Необходима авторизация',
+  serverError: 'Internal Server Error',
 };
 
 module.exports = errorMessages;
