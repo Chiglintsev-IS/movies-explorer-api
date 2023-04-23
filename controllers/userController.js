@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const BadRequest = require('../errors/BadRequest');
+const ConflictError = require('../errors/ConflictError');
 const errorMessages = require('../utils/errorMessages');
 
 const getUser = async (req, res, next) => {
@@ -24,8 +25,12 @@ const updateUser = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new BadRequest(errorMessages.wrongUserId));
-    } else if (err.name === 'ValidationError') {
+    }
+    if (err.name === 'ValidationError') {
       next(new BadRequest(errorMessages.invalidUpdateUserDataPayload));
+    }
+    if (err.code === 11000) {
+      next(new ConflictError(errorMessages.userAlreadyExists));
     }
     next(err);
   }
