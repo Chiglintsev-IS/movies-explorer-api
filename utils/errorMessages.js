@@ -26,6 +26,7 @@ const errorMessages = {
   ...movieRelatedErrors,
   ...validateErrorMessages,
   unauthorized: 'Необходима авторизация',
+  routeNotFound: 'Запрашиваемый ресурс не найден',
   serverError: 'Internal Server Error',
 };
 
